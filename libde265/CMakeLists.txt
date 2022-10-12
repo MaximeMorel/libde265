@@ -43,7 +43,6 @@ set (libde265_headers
   bitstream.h
   cabac.h
   configparam.h
-  de265-version.h
   contextmodel.h
   de265.h
   deblock.h
@@ -88,7 +87,10 @@ add_definitions(-DLIBDE265_EXPORTS)
 
 add_subdirectory (encoder)
 
-if(NOT DISABLE_SSE)
+if(HAVE_ARM)
+  add_subdirectory (arm)
+  set(ARCH_OBJECTS ${ARM_OBJECTS})
+elseif(NOT DISABLE_SSE)
   if (MSVC)
     set(SUPPORTS_SSE2 1)
     set(SUPPORTS_SSSE3 1)
@@ -104,10 +106,11 @@ if(NOT DISABLE_SSE)
   endif()
   if(SUPPORTS_SSE4_1 OR (SUPPORTS_SSE2 AND SUPPORTS_SSSE3))
     add_subdirectory (x86)
+    set(ARCH_OBJECTS ${X86_OBJECTS})
   endif()
 endif()
 
-add_library(${PROJECT_NAME} ${libde265_sources} ${ENCODER_OBJECTS} ${X86_OBJECTS})
+add_library(${PROJECT_NAME} ${libde265_sources} ${ENCODER_OBJECTS} ${ARCH_OBJECTS})
 target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
 
 write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake COMPATIBILITY ExactVersion)

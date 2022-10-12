@@ -69,5 +69,26 @@ if(MSVC)
 endif()
 
 add_subdirectory (libde265)
-add_subdirectory (dec265)
-add_subdirectory (enc265)
+
+option(HAVE_ARM "Enable arm architecture" OFF)
+if (HAVE_ARM)
+  add_definitions(-DHAVE_ARM)
+endif()
+
+option(WITH_DEC265 "Build dec265 decoder" OFF)
+if (WITH_DEC265)
+  add_subdirectory (dec265)
+endif()
+option(WITH_ENC265 "Build enc265 encoder" OFF)
+if (WITH_ENC265)
+  add_subdirectory (enc265)
+endif()
+
+set(prefix ${CMAKE_INSTALL_PREFIX})
+set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+set(libdir ${CMAKE_INSTALL_FULL_LIBDIR})
+set(includedir ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+set(VERSION ${PROJECT_VERSION})
+configure_file(libde265.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libde265.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libde265.pc
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
