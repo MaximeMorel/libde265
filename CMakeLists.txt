@@ -1,3 +1,6 @@
+# This file has been modified by Adobe.
+# All modifications are Copyright 2022 Adobe.
+
 cmake_minimum_required (VERSION 3.3.2)
 
 project (libde265

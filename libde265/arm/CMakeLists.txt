@@ -1,3 +1,6 @@
+# This file has been modified by Adobe.
+# All modifications are Copyright 2022 Adobe.
+
 set (arm_sources 
   arm.cc arm.h
 )
